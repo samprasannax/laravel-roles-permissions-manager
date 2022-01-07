@@ -1,15 +1,36 @@
-@extends('layouts.admin')
-@section('content')
+  @include('layouts.top-header')
+ @include('layouts.main-header')
+ @include('partials.main-sidebar')
 
-<div class="card">
-    <div class="card-header">
-        {{ trans('global.edit') }} {{ trans('cruds.role.title_singular') }}
-    </div>
+   <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Edit Roles
+        
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{{ route("admin.home") }}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="{{ route("admin.roles.index") }}">View Roles</a></li>
+        <li class="active">Edit Roles</li>
+      </ol>
+    </section>
 
-    <div class="card-body">
-        <form action="{{ route("admin.roles.update", [$role->id]) }}" method="POST" enctype="multipart/form-data">
-            @csrf
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <!-- left column -->
+        <div class="col-md-6">
+          <!-- general form elements -->
+          <div class="box box-primary">           
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form action="{{ route("admin.roles.update", [$role->id]) }}" method="POST" enctype="multipart/form-data">
+               
+                @csrf
             @method('PUT')
+              <div class="box-body">
             <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                 <label for="name">{{ trans('cruds.role.fields.title') }}*</label>
                 <input type="text" id="name" name="name" class="form-control" value="{{ old('name', isset($role) ? $role->name : '') }}" required>
@@ -40,12 +61,28 @@
                     {{ trans('cruds.role.fields.permissions_helper') }}
                 </p>
             </div>
-            <div>
-                <input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">
-            </div>
-        </form>
 
 
-    </div>
-</div>
-@endsection
+
+              <!-- /.box-body -->
+
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
+          </div>
+          <!-- /.box -->
+
+        
+        </div>
+        <!--/.col (left) -->
+     
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+
+ @include('layouts.bottom-footer')

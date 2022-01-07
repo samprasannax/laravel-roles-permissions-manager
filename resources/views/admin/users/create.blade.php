@@ -1,15 +1,36 @@
-@extends('layouts.admin')
-@section('content')
+  @include('layouts.top-header')
+ @include('layouts.main-header')
+ @include('partials.main-sidebar')
 
-<div class="card">
-    <div class="card-header">
-        {{ trans('global.create') }} {{ trans('cruds.user.title_singular') }}
-    </div>
+   <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Create Users        
+      </h1>
 
-    <div class="card-body">
-        <form action="{{ route("admin.users.store") }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
+      <ol class="breadcrumb">
+        <li><a href="{{ route("admin.home") }}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="{{ route("admin.users.index") }}">View Users</a></li>
+        <li class="active">Create Users</li>
+      </ol>
+
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <!-- left column -->
+        <div class="col-md-6">
+          <!-- general form elements -->
+          <div class="box box-primary">           
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form action="{{ route("admin.users.store") }}" method="POST" enctype="multipart/form-data">
+                @csrf
+              <div class="box-body">
+               <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                 <label for="name">{{ trans('cruds.user.fields.name') }}*</label>
                 <input type="text" id="name" name="name" class="form-control" value="{{ old('name', isset($user) ? $user->name : '') }}" required>
                 @if($errors->has('name'))
@@ -63,12 +84,25 @@
                     {{ trans('cruds.user.fields.roles_helper') }}
                 </p>
             </div>
-            <div>
-                <input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">
-            </div>
-        </form>
+              <!-- /.box-body -->
+
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
+          </div>
+          <!-- /.box -->
+
+        
+        </div>
+        <!--/.col (left) -->
+     
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
 
 
-    </div>
-</div>
-@endsection
+ @include('layouts.bottom-footer')

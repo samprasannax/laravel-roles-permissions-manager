@@ -1,50 +1,53 @@
-@extends('layouts.admin')
-@section('content')
-@can('users_manage')
-    <div style="margin-bottom: 10px;" class="row">
-        <div class="col-lg-12">
-            <a class="btn btn-success" href="{{ route("admin.users.create") }}">
-                {{ trans('global.add') }} {{ trans('cruds.user.title_singular') }}
-            </a>
-        </div>
-    </div>
-@endcan
-<div class="card">
-    <div class="card-header">
-        {{ trans('cruds.user.title_singular') }} {{ trans('global.list') }}
-    </div>
+  @include('layouts.top-header')
+ @include('layouts.main-header')
+ @include('partials.main-sidebar')
 
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-User">
+ <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+       Users        
+      </h1>
+
+      <ol class="breadcrumb">
+        <li><a href="{{ route("admin.home") }}"><i class="fa fa-dashboard"></i> Home</a></li>
+         <li class="active">Users</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+            <div class="box-header">
+
+              <h3 class="box-title"> 
+                <a class="btn btn-success" href="{{ route("admin.users.create") }}">
+                  Add Users
+                </a>
+              </h3>
+
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="example1" class="table table-bordered table-striped">
                 <thead>
-                    <tr>
-                        <th width="10">
-
-                        </th>
-                        <th>
-                            {{ trans('cruds.user.fields.id') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.user.fields.name') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.user.fields.email') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.user.fields.roles') }}
-                        </th>
-                        <th>
-                            &nbsp;
-                        </th>
-                    </tr>
+                <tr>
+                  <th>Id</th>
+                  <th>Name</th>  
+                  <th>Email</th> 
+                  
+                  <th>Roles</th>                
+                  <th>Action</th>
+                </tr>
                 </thead>
                 <tbody>
+              
                     @foreach($users as $key => $user)
                         <tr data-entry-id="{{ $user->id }}">
-                            <td>
-
-                            </td>
+                           
                             <td>
                                 {{ $user->id ?? '' }}
                             </td>
@@ -60,18 +63,16 @@
                                 @endforeach
                             </td>
                             <td>
-                                <a class="btn btn-xs btn-primary" href="{{ route('admin.users.show', $user->id) }}">
-                                    {{ trans('global.view') }}
-                                </a>
+                                
 
-                                <a class="btn btn-xs btn-info" href="{{ route('admin.users.edit', $user->id) }}">
+                                <a class="btn  btn-info" href="{{ route('admin.users.edit', $user->id) }}">
                                     {{ trans('global.edit') }}
                                 </a>
 
                                 <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                    <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
+                                    <input type="submit" class="btn  btn-danger" value="{{ trans('global.delete') }}">
                                 </form>
 
                             </td>
@@ -79,23 +80,45 @@
                         </tr>
                     @endforeach
                 </tbody>
-            </table>
+               
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
         </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+ @include('layouts.bottom-footer')
 
+ <script>
+  $(function () {
+    $('#example1').DataTable()
+    $('#example2').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : false,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    })
+  })
+</script>
 
-    </div>
-</div>
-@endsection
 @section('scripts')
 @parent
 <script>
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-@can('users_manage')
   let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
   let deleteButton = {
     text: deleteButtonTrans,
-    url: "{{ route('admin.users.mass_destroy') }}",
+    url: "{{ route('admin.roles.mass_destroy') }}",
     className: 'btn-danger',
     action: function (e, dt, node, config) {
       var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {
@@ -119,13 +142,12 @@
     }
   }
   dtButtons.push(deleteButton)
-@endcan
 
   $.extend(true, $.fn.dataTable.defaults, {
     order: [[ 1, 'desc' ]],
     pageLength: 100,
   });
-  $('.datatable-User:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+  $('.datatable-Role:not(.ajaxTable)').DataTable({ buttons: dtButtons })
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
         $($.fn.dataTable.tables(true)).DataTable()
             .columns.adjust();

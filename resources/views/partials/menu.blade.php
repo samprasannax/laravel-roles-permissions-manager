@@ -10,6 +10,7 @@
                     {{ trans('global.dashboard') }}
                 </a>
             </li>
+
             @can('users_manage')
                 <li class="nav-item nav-dropdown">
                     <a class="nav-link  nav-dropdown-toggle" href="#">
@@ -46,6 +47,9 @@
                     </ul>
                 </li>
             @endcan
+
+
+            
             <li class="nav-item">
                 <a href="{{ route('auth.change_password') }}" class="nav-link">
                     <i class="nav-icon fas fa-fw fa-key">
